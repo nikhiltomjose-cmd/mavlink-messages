@@ -288,49 +288,6 @@
       </entry>
     </enum>
 
-    <enum name="UGV_SPEED_MODE">
-      <description>Speed mode of UGV</description>
-
-      <entry value="0" name="RESERVED">
-        <description> Reserved </description>
-      </entry>
-
-      <entry value="1" name="UGV_SPEED_MODE_LOW_SPEED">
-        <description>Low Speed</description>
-      </entry>
-
-      <entry value="2" name="UGV_SPEED_MODE_MEDIUM_SPEED">
-        <description>Medium Speed</description>
-      </entry>
-
-      <entry value="3" name="UGV_SPEED_MODE_HIGH_SPEED">
-        <description>High Speed</description>
-      </entry>
-
-    </enum>
-
-    <enum name="UGV_DRIVE_MODE">
-
-      <description>Drive mode of UGV</description>
-
-      <entry value="1" name="SPEED_MODE">
-        <description> Speed Mode </description>
-      </entry>
-
-      <entry value="2" name="TORQUE_MODE">
-        <description> Torque Mode </description>
-      </entry>
-
-      <entry value="3" name="TORQUE_WITH_SPEED_LIMIT">
-        <description> Torque with speed limit </description>
-      </entry>
-
-      <entry value="4" name="POSITION_MODE">
-        <description> Position Mode </description>
-      </entry>
-
-    </enum>
-
     <enum name="MODE_CHANGE_REASON">
       <description>Reason for sub-mode change.</description>
       <entry value="0" name="GCS_COMMAND">
@@ -400,18 +357,16 @@
       <field type="uint64_t" name="time_unix_usec" units="us">Timestamp (UNIX epoch time).</field>
       <field type="uint32_t" name="time_boot_ms" units="ms">Timestamp (time since system boot).</field>
     </message>
-
     <message id="69" name="MANUAL_CONTROL">
       <description>Manual (joystick) control message.
         This message represents movement axes and button using standard joystick axes nomenclature. Unused axes can be disabled and buttons states are transmitted as individual on/off bits of a bitmask. For more information see https://mavlink.io/en/services/manual_control.html</description>
       <field type="uint8_t" name="target">The system to be controlled.</field>
-      <field type="float" name="x" minValue="-1000" maxValue="1000" invalid="INT16_MAX">X-axis, normalized to the range [-1000,1000]. A value of INT16_MAX indicates that this axis is invalid. Generally corresponds to forward(1000)-backward(-1000) movement on a joystick and the pitch of a vehicle.</field>
-      <field type="float" name="y" minValue="-1000" maxValue="1000" invalid="INT16_MAX">Y-axis, normalized to the range [-1000,1000]. A value of INT16_MAX indicates that this axis is invalid. Generally corresponds to left(-1000)-right(1000) movement on a joystick and the roll of a vehicle.</field>
-      <field type="int16_t" name="z" minValue="-1000" maxValue="1000" invalid="INT16_MAX">Z-axis, normalized to the range [-1000,1000]. A value of INT16_MAX indicates that this axis is invalid. Generally corresponds to a separate slider movement with maximum being 1000 and minimum being -1000 on a joystick and the thrust of a vehicle. Positive values are positive thrust, negative values are negative thrust.</field>
-      <field type="int16_t" name="r" minValue="-1000" maxValue="1000" invalid="INT16_MAX">R-axis, normalized to the range [-1000,1000]. A value of INT16_MAX indicates that this axis is invalid. Generally corresponds to a twisting of the joystick, with clockwise being 1000 and counter-clockwise being -1000, and the yaw of a vehicle.</field>
+      <field type="float" name="x" minValue="-2.78" maxValue="2.78" invalid="NaN">X-axis, normalized to the range [-2.78,2.78]. A value of NaN indicates that this axis is invalid. Generally corresponds to forward(2.78)-backward(-2.78) movement on a joystick and the pitch of a vehicle.</field>
+      <field type="float" name="y" minValue="-13.7" maxValue="13.7" invalid="NaN">Y-axis, normalized to the range [-13.7,13.7]. A value of NaN indicates that this axis is invalid. Generally corresponds to left(-13.7)-right(13.7) movement on a joystick and the roll of a vehicle.</field>
+      <field type="int16_t" name="z" invalid="INT16_MAX">Z-axis, normalized to the range [-1000,1000]. A value of INT16_MAX indicates that this axis is invalid. Generally corresponds to a separate slider movement with maximum being 1000 and minimum being -1000 on a joystick and the thrust of a vehicle. Positive values are positive thrust, negative values are negative thrust.</field>
+      <field type="int16_t" name="r" invalid="INT16_MAX">R-axis, normalized to the range [-1000,1000]. A value of INT16_MAX indicates that this axis is invalid. Generally corresponds to a twisting of the joystick, with clockwise being 1000 and counter-clockwise being -1000, and the yaw of a vehicle.</field>
       <field type="uint16_t" name="push_buttons" enum="PUSH_BUTTONS">A bitfield corresponding to the joystick buttons' 0-15 current state, 1 for pressed, 0 for released. The lowest bit corresponds to Button 1.</field>
       <extensions/>
-      <field type="uint16_t" name="tristate_toggle_switches" enum="TOGGLE_SWITCH_POS">A bitfield corresponding to the joystick buttons' 16-31 current state, 1 for pressed, 0 for released. The lowest bit corresponds to Button 16.</field>
       <field type="uint8_t" name="enabled_extensions">Set bits to 1 to indicate which of the following extension fields contain valid data: bit 0: pitch, bit 1: roll, bit 2: aux1, bit 3: aux2, bit 4: aux3, bit 5: aux4, bit 6: aux5, bit 7: aux6</field>
       <field type="int16_t" name="s" minValue="-1000" maxValue="1000">Pitch-only-axis, normalized to the range [-1000,1000]. Generally corresponds to pitch on vehicles with additional degrees of freedom. Valid if bit 0 of enabled_extensions field is set. Set to 0 if invalid.</field>
       <field type="int16_t" name="t" minValue="-1000" maxValue="1000">Roll-only-axis, normalized to the range [-1000,1000]. Generally corresponds to roll on vehicles with additional degrees of freedom. Valid if bit 1 of enabled_extensions field is set. Set to 0 if invalid.</field>
@@ -448,15 +403,15 @@
       <field type="uint8_t" name="target_system">System ID of the target recipient. This is the ID of the system that sent the command for which this COMMAND_ACK is an acknowledgement.</field>
       <field type="uint8_t" name="target_component">Component ID of the target recipient. This is the ID of the system that sent the command for which this COMMAND_ACK is an acknowledgement.</field>
     </message>
-
+    
     <message id="109" name="RADIO_STATUS">
       <description>Status generated by radio and injected into MAVLink stream.</description>
       <field type="uint8_t" name="rssi" invalid="UINT8_MAX">Local (message sender) received signal strength indication in device-dependent units/scale. Values: [0-254], UINT8_MAX: invalid/unknown.</field>
-      <field type="uint8_t" name="rem_rssi" invalid="UINT8_MAX">Remote (message receiver) signal strength indication in device-dependent units/scale. Values: [0-254], UINT8_MAX: invalid/unknown.</field>
-      <field type="uint8_t" name="tx_buf" units="%">Remaining free transmitter buffer space.</field>
+      <field type="uint8_t" name="remrssi" invalid="UINT8_MAX">Remote (message receiver) signal strength indication in device-dependent units/scale. Values: [0-254], UINT8_MAX: invalid/unknown.</field>
+      <field type="uint8_t" name="txbuf" units="%">Remaining free transmitter buffer space.</field>
       <field type="uint8_t" name="noise" invalid="UINT8_MAX">Local background noise level. These are device dependent RSSI values (scale as approx 2x dB on SiK radios). Values: [0-254], UINT8_MAX: invalid/unknown.</field>
-      <field type="uint8_t" name="rem_noise" invalid="UINT8_MAX">Remote background noise level. These are device dependent RSSI values (scale as approx 2x dB on SiK radios). Values: [0-254], UINT8_MAX: invalid/unknown.</field>
-      <field type="uint16_t" name="rx_errors">Count of radio packet receive errors (since boot).</field>
+      <field type="uint8_t" name="remnoise" invalid="UINT8_MAX">Remote background noise level. These are device dependent RSSI values (scale as approx 2x dB on SiK radios). Values: [0-254], UINT8_MAX: invalid/unknown.</field>
+      <field type="uint16_t" name="rxerrors">Count of radio packet receive errors (since boot).</field>
       <field type="uint16_t" name="fixed">Count of error corrected radio packets (since boot).</field>
     </message>
 
@@ -537,28 +492,12 @@
         Current active sub mode.
       </field>
 
-      <field type="uint8_t" name="speed_mode" enum="UGV_SPEED_MODE">
-        Current active speed mode.
-      </field>
-
-      <field type="uint8_t" name="drive_mode" enum="UGV_DRIVE_MODE">
-        Current active drive mode.
-      </field>
-
       <field type="uint8_t" name="intended_main_mode" enum="UGV_MAIN_MODE">
         Last main mode commanded by GCS.
       </field>
 
       <field type="uint8_t" name="intended_sub_mode" enum="UGV_SUB_MODE">
         Last sub mode commanded by GCS.
-      </field>
-
-      <field type="uint8_t" name="intended_speed_mode" enum="UGV_SPEED_MODE">
-        Last speed mode commanded by GCS.
-      </field>
-
-      <field type="uint8_t" name="intended_drive_mode" enum="UGV_DRIVE_MODE">
-        Last drive mode commanded by GCS.
       </field>
 
       <field type="uint8_t" name="mode_change_reason" enum="MODE_CHANGE_REASON">
@@ -593,9 +532,9 @@
         Right Motor Controller Faults
       </field>
 
-      <field type="uint16_t" name="left_mc_voltage">Left Motor Controller Voltage (Unit: 0.1 V)</field>
+      <field type="uint8_t" name="left_mc_voltage">Left Motor Controller Voltage (Unit: 0.1 V)</field>
 
-      <field type="uint16_t" name="right_mc_voltage">Right Motor Controller Voltage (Unit: 0.1 V)</field>
+      <field type="uint8_t" name="right_mc_voltage">Right Motor Controller Voltage (Unit: 0.1 V)</field>
 
       <field type="uint8_t" name="left_mc_temperature">Left Motor Controller Temperature (Unit: 1 Degree Celsius)</field>
 
